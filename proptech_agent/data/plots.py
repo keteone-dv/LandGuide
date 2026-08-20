@@ -11,6 +11,44 @@ not a judgment call:
 
 zoning fields feed the Pro Data Engine's K1/K2/K3 calculation and are only
 ever shown to Pro-tier queries (R9 tier gating).
+
+Required record shape — every entry in PLOTS, keyed by a 10-digit cadastral
+code string (matches lookup.py's CADASTRAL_CODE_PATTERN), must be a dict with:
+
+    owner_name                str   required
+    address                   str   required
+    total_area_sqm            int | float   required, > 0
+    land_designation          str   required, e.g. "agricultural" | "non-agricultural"
+    legal_status              str   required, closed enum (see above)
+    legal_status_note         str   required (free text, shown as-is to users)
+    zoning                    dict  required, see below
+
+    zoning = {
+        functional_zone               str    required (free text zone label —
+                                                see the known limitation in
+                                                CLAUDE.md: these are placeholders
+                                                and don't match legal_corpus.json)
+        footprint_pct                 int | float   required
+                                                — validated by pro.py as
+                                                0 < footprint_pct <= 100
+        far                            int | float   required
+                                                — validated by pro.py as far > 0
+        green_space_pct               int | float   required
+                                                — validated by pro.py as
+                                                0 < green_space_pct <= 100
+        max_height_m                   int | float   required, shown as-is (R14
+                                                does not range-check this field)
+        density_limit_units_per_ha     int | float   required, shown as-is (R14
+                                                does not range-check this field)
+        buffer_zones                   list[str]     required, may be empty []
+    }
+
+No field is Optional at the data layer — pro_data_engine (R14) validates
+footprint_pct, far, and green_space_pct before use and rejects the record
+with pro_input_error if they're out of range, but it assumes every key above
+is present and will raise KeyError on a record missing one. If you add a
+plot with different fields, update pro.py's _validate_zoning_inputs and the
+response dicts in pro.py / regular.py to match — this file is data only.
 """
 
 PLOTS = {
