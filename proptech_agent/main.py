@@ -22,7 +22,7 @@ def process_query(cadastral_code: str, tier: str, folder: str, rag_question: str
         "pro_response": None,
         "pro_input_error": None,
         "rag_draft": None,
-        "rag_citation": None,
+        "rag_citations": None,
         "grounded": None,
         "critic_approved": None,
         "critic_feedback": None,

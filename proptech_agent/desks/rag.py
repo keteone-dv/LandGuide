@@ -88,22 +88,27 @@ def rag_answer_agent(state: PlotQueryState) -> dict:
         print(f"      - {msg_type}: {preview}")
 
     draft = r["messages"][-1].text
-    citation_match = re.search(r"\[([A-Z]{2,3}-[\d.]+)\]", draft)
-    citation = citation_match.group(1) if citation_match else None
+    raw_citations = re.findall(r"\[([A-Z]{2,3}-[\d.]+)\]", draft)
+    citations = list(dict.fromkeys(raw_citations))  # dedupe, preserve first-seen order
 
     return {
         "rag_draft": draft,
-        "rag_citation": citation,
-        "audit": state["audit"] + [f"rag_answer_agent: drafted, citation={citation}"],
+        "rag_citations": citations,
+        "audit": state["audit"] + [f"rag_answer_agent: drafted, citations={citations}"],
     }
 
 def grounding_check(state: PlotQueryState) -> dict:
-    """R12 — a RULE, not an opinion. Does the cited clause_id actually exist?"""
-    citation = state["rag_citation"]
-    grounded = citation is not None and any(c["clause_id"] == citation for c in LEGAL_CORPUS)
+    """R12 — a RULE, not an opinion. Does every cited clause_id actually exist?
+    A draft that cites nothing, or cites even one clause_id not in the corpus
+    (e.g. a hallucinated bracket), fails grounding — same bar as before for the
+    common single-citation case, now enforced across every citation in a
+    multi-topic answer."""
+    citations = state["rag_citations"]
+    known_ids = {c["clause_id"] for c in LEGAL_CORPUS}
+    grounded = bool(citations) and all(cid in known_ids for cid in citations)
     return {
         "grounded": grounded,
-        "audit": state["audit"] + [f"grounding_check: {'PASS' if grounded else 'FAIL'} ({citation})"],
+        "audit": state["audit"] + [f"grounding_check: {'PASS' if grounded else 'FAIL'} ({citations})"],
     }
 
 
@@ -131,20 +136,42 @@ def compliance_critic(state: PlotQueryState) -> dict:
 
 def not_covered_fallback(state: PlotQueryState) -> dict:
     """R13 + R15 — the single honest fallback for both a failed grounding check
-    and an exhausted critic bounce budget. No unverified answer ever reaches
-    the architect."""
+    and an exhausted critic bounce budget. No unverified draft ever reaches the
+    architect, but the two routes mean different things: a failed grounding
+    check means the citation itself doesn't check out (missing or hallucinated),
+    while an exhausted bounce budget means a grounded, correctly-cited draft
+    still failed the critic's tone/completeness bar — the regulation WAS found,
+    the critic just couldn't be satisfied. Reporting both as "not covered"
+    misleads the architect into thinking the regulation is silent on the topic,
+    so the two cases get distinct messages. `state["grounded"]` reliably tells
+    them apart: it's only ever True here via the bounce-budget-exhausted route,
+    since the grounding-failure route jumps straight here with grounded=False.
+    """
+    if state.get("grounded"):
+        citations = ", ".join(state["rag_citations"])
+        answer = (
+            f"Relevant regulation was found (clause(s): {citations}), but this answer "
+            "did not fully clear compliance review after multiple attempts. Please "
+            "consult these clauses directly, or confirm with the relevant municipal "
+            "authority before relying on this."
+        )
+        reason = "bounce budget exhausted on a grounded draft"
+    else:
+        answer = "This question is not covered in the available regulations."
+        reason = "grounding check failed"
+
     return {
         "rag_final_answer": {
-            "answer": "This question is not covered in the available regulations.",
-            "citation": None,
+            "answer": answer,
+            "citations": state.get("rag_citations") or [],
         },
-        "audit": state["audit"] + ["not_covered_fallback: returned safe default"],
+        "audit": state["audit"] + [f"not_covered_fallback: returned safe default ({reason})"],
     }
 
 
 def finalize_rag_answer(state: PlotQueryState) -> dict:
     return {
-        "rag_final_answer": {"answer": state["rag_draft"], "citation": state["rag_citation"]},
+        "rag_final_answer": {"answer": state["rag_draft"], "citations": state["rag_citations"]},
         "audit": state["audit"] + ["finalize_rag_answer: answer cleared both gates"],
     }
 

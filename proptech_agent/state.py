@@ -26,12 +26,12 @@ class PlotQueryState(TypedDict):
 
     # ── RAG legal chat (R7, R8, R12, R13, R15) ──
     rag_draft: Optional[str]
-    rag_citation: Optional[str]
+    rag_citations: Optional[list[str]]  # every clause_id cited in the draft, in order, deduped
     grounded: Optional[bool]
     critic_approved: Optional[bool]
     critic_feedback: Optional[str]
     bounce_count: int
-    rag_final_answer: Optional[dict]  # {"answer": ..., "citation": ...} or the not-covered fallback
+    rag_final_answer: Optional[dict]  # {"answer": ..., "citations": [...]} or the not-covered fallback
 
     # ── R10 ──
     audit: list
