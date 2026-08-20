@@ -1,0 +1,106 @@
+
+[PASS] 1. Cadastral code format edge cases
+  all malformed codes correctly rejected by regex; well-formed-but-unknown code rejected via DB miss, not format
+
+[PASS] 2. buffer_zones empty vs multiple
+  handled 0/1/3-item buffer_zones lists without error
+
+[PASS] 3. R14 boundary values (0 and 100)
+  footprint_pct=0 -> pro_input_error='footprint_pct 0 is out of range (0-100)'; footprint_pct=100 -> pro_input_error=None -- see report for whether this asymmetry (0 rejected, 100 accepted) is intended
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients for low-intensity residential zone (სზ-2)')
+    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
+      - AIMessage: 
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients low-intensity residential zone (სზ-2)')
+    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
+      - AIMessage: 
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: The K1, K2, and K3 coefficients for a low-intensity residential zone (სზ-2) are 
+
+[PASS] 4a. compliance_critic bounce-then-recover
+  bounce fired once, retry loop re-ran rag_answer_agent, then approved
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients low-intensity residential zone (სზ-2)')
+    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
+      - AIMessage: 
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For the low-intensity residential zone (სზ-2), the K1, K2, and K3 coefficients a
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients for low-intensity residential zone (სზ-2)')
+    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
+      - AIMessage: 
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For a low-intensity residential zone (სზ-2), the coefficients are as follows:
+
+-
+
+[PASS] 4b. compliance_critic bounce budget exhausted -> fallback
+  after 2 rejects, routed to not_covered_fallback as designed
+    [TOOL CALL] search_legal_corpus(query='parking requirements')
+    [TOOL RESULT] found 3 article(s): ['BAT-5', 'BAT-17', 'BAT-22']
+    [TOOL CALL] search_legal_corpus(query='green space requirements')
+    [TOOL RESULT] found 14 article(s): ['BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-18', 'BAT-19', 'BAT-22']
+    [AGENT TRACE] 5 messages in this turn:
+      - HumanMessage: What are the parking and green space requirements for my plot?
+      - AIMessage: 
+      - ToolMessage: [BAT-5] მუხლი 5 (page 3, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - ToolMessage: [BAT-4] მუხლი 4 (page 2, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For your plot in Batumi, the parking and green space requirements are as follows
+    [TOOL CALL] search_legal_corpus(query='parking requirements')
+    [TOOL RESULT] found 3 article(s): ['BAT-5', 'BAT-17', 'BAT-22']
+    [TOOL CALL] search_legal_corpus(query='green space requirements')
+    [TOOL RESULT] found 14 article(s): ['BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-18', 'BAT-19', 'BAT-22']
+    [AGENT TRACE] 5 messages in this turn:
+      - HumanMessage: What are the parking and green space requirements for my plot?
+
+Your previous dr
+      - AIMessage: 
+      - ToolMessage: [BAT-5] მუხლი 5 (page 3, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - ToolMessage: [BAT-4] მუხლი 4 (page 2, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For your plot in Batumi, the parking and green space requirements are specified 
+
+[FAIL] 5. Ambiguous question (parking + green space)
+  fell back to not-covered instead of answering either topic: citations=[], answer preview='This question is not covered in the available regulations.'
+    [TOOL CALL] search_legal_corpus(query='აშენება დაბალი ინტენსივობის საცხოვრებელი ზონისთვის (სზ-2)')
+    [TOOL RESULT] found 16 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-15', 'BAT-16', 'BAT-17', 'BAT-22', 'BAT-32']
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: რა არის მაქსიმალური სიმაღლე დაბალი ინტენსივობის საცხოვრებელი ზონისთვის (სზ-2)?
+      - AIMessage: 
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: მაქსიმალური სიმაღლე დაბალი ინტენსივობის საცხოვრებელი ზონისთვის (სზ-2) არის 3 სარ
+
+[PASS] 6. Georgian-language RAG question
+  answer language is Georgian as instructed: 'მაქსიმალური სიმაღლე დაბალი ინტენსივობის საცხოვრებელი ზონისთვის (სზ-2) არის 3 სართული [BAT-32]. \n\nThis is advisory information — confirm with the relevant municipal authority before relying on it.'
+
+[PASS] 7. rag_question='' (empty string) falsy check
+  needs_rag correctly treats '' as falsy, RAG never invoked
+    [TOOL CALL] search_legal_corpus(query='noise level construction site night')
+    [TOOL RESULT] no matching articles found
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: What's the maximum allowed noise level for a construction site at night?
+      - AIMessage: 
+      - ToolMessage: No matching clauses found in the corpus.
+      - AIMessage: This is not covered in the available regulations. This is advisory information —
+
+[PASS] 8. Thread isolation across different thread_ids
+  no cross-thread state leakage observed
+
+======================================================================
+SUMMARY
+======================================================================
+[PASS] 1. Cadastral code format edge cases
+[PASS] 2. buffer_zones empty vs multiple
+[PASS] 3. R14 boundary values (0 and 100)
+[PASS] 4a. compliance_critic bounce-then-recover
+[PASS] 4b. compliance_critic bounce budget exhausted -> fallback
+[FAIL] 5. Ambiguous question (parking + green space)
+[PASS] 6. Georgian-language RAG question
+[PASS] 7. rag_question='' (empty string) falsy check
+[PASS] 8. Thread isolation across different thread_ids
