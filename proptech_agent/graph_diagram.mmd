@@ -1,0 +1,36 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	validate_and_lookup(validate_and_lookup)
+	not_found_response(not_found_response)
+	regular_formatter(regular_formatter)
+	pro_data_engine(pro_data_engine)
+	rag_answer_agent(rag_answer_agent)
+	grounding_check(grounding_check)
+	compliance_critic(compliance_critic)
+	not_covered_fallback(not_covered_fallback)
+	finalize_rag_answer(finalize_rag_answer)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> validate_and_lookup;
+	compliance_critic -.-> finalize_rag_answer;
+	compliance_critic -.-> not_covered_fallback;
+	compliance_critic -.-> rag_answer_agent;
+	grounding_check -.-> compliance_critic;
+	grounding_check -.-> not_covered_fallback;
+	pro_data_engine -.-> __end__;
+	pro_data_engine -.-> rag_answer_agent;
+	rag_answer_agent --> grounding_check;
+	validate_and_lookup -.-> not_found_response;
+	validate_and_lookup -.-> pro_data_engine;
+	validate_and_lookup -.-> regular_formatter;
+	finalize_rag_answer --> __end__;
+	not_covered_fallback --> __end__;
+	not_found_response --> __end__;
+	regular_formatter --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc
