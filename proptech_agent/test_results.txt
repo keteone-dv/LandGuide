@@ -50,18 +50,25 @@ audit trail:
 ======================================================================
 test-4-pro-input-validation — PRO query for 0500990011
 ======================================================================
-→ REJECTED by input validation: footprint_pct 140 is out of range (0-100)
+→ REJECTED by input validation: footprint_pct 140 is out of range (0-100, exclusive of 100)
 
 audit trail:
   - validate_and_lookup: found plot at 19 Pekini Ave, Tbilisi
-  - pro_data_engine: REJECTED — footprint_pct 140 is out of range (0-100)
-    [TOOL CALL] search_legal_corpus(query='K1, K2, K3 coefficients for low-intensity residential zone')
+  - pro_data_engine: REJECTED — footprint_pct 140 is out of range (0-100, exclusive of 100)
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients low-intensity residential zone (სზ-2)')
     [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
     [AGENT TRACE] 4 messages in this turn:
       - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
       - AIMessage: 
       - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: The K1, K2, and K3 coefficients for a low-intensity residential zone (სზ-2) are 
+      - AIMessage: For the low-intensity residential zone (შეზ-2), the coefficients are as follows:
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients for low-intensity residential zone (სზ-2)')
+    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
+      - AIMessage: 
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as
 
 ======================================================================
 test-5-rag-grounded — PRO query for 0100112233
@@ -84,21 +91,24 @@ RAG question: What are the K1, K2, and K3 coefficients for a low-intensity resid
 }
 
 --- RAG legal chat answer ---
-The K1, K2, and K3 coefficients for a low-intensity residential zone (სზ-2) are as follows:
+For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as follows:
 
-- K1: 0.5
-- K2: 1.2
-- K3: 0.3
+- K1 coefficient: 0.5
+- K2 coefficient: 1.2
+- K3 coefficient: 0.3
 
-These coefficients are specified for construction parameters in the low-intensity residential zone [BAT-4]. 
+These specifications outline the parameters for construction within this zone [BAT-4]. 
 
 This is advisory information — confirm with the relevant municipal authority before relying on it.
 
 audit trail:
   - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
   - pro_data_engine: K1=200.0, K2=600.0, K3=75.0
-  - rag_answer_agent: drafted, citation=BAT-4
-  - grounding_check: PASS (BAT-4)
+  - rag_answer_agent: drafted, citations=['BAT-4']
+  - grounding_check: PASS (['BAT-4'])
+  - compliance_critic: BOUNCED
+  - rag_answer_agent: drafted, citations=['BAT-4']
+  - grounding_check: PASS (['BAT-4'])
   - compliance_critic: APPROVED
   - finalize_rag_answer: answer cleared both gates
     [TOOL CALL] search_legal_corpus(query='maximum allowed noise level construction site night')
@@ -135,16 +145,18 @@ This question is not covered in the available regulations.
 audit trail:
   - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
   - pro_data_engine: K1=200.0, K2=600.0, K3=75.0
-  - rag_answer_agent: drafted, citation=None
-  - grounding_check: FAIL (None)
-  - not_covered_fallback: returned safe default
-    [TOOL CALL] search_legal_corpus(query='max height of building')
+  - rag_answer_agent: drafted, citations=[]
+  - grounding_check: FAIL ([])
+  - not_covered_fallback: returned safe default (grounding check failed)
+    [TOOL CALL] search_legal_corpus(query='max height of buildings')
     [TOOL RESULT] found 12 article(s): ['BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-32']
     [AGENT TRACE] 4 messages in this turn:
       - HumanMessage: what is the max height of building I can build here?
       - AIMessage: 
       - ToolMessage: [BAT-4] მუხლი 4 (page 2, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: The maximum height for buildings in Batumi depends on the zoning category. Here 
+      - AIMessage: The maximum height of buildings in Batumi varies depending on the zoning type:
+
+
 
 ======================================================================
 test-7-pro-rag-max-height — PRO query for 0100112233
@@ -167,34 +179,39 @@ RAG question: what is the max height of building I can build here?
 }
 
 --- RAG legal chat answer ---
-The maximum height for buildings in Batumi depends on the zoning category. Here are the limits:
+The maximum height of buildings in Batumi varies depending on the zoning type:
 
-1. Low-intensity residential zone: Maximum of 3 stories [BAT-32].
-2. Medium-intensity residential zone: Maximum of 5 stories [BAT-32].
-3. High-intensity residential zone: Maximum of 8 stories [BAT-32].
-4. Central zone: Maximum of 10 stories [BAT-32].
-5. Business zone: Maximum of 13 stories [BAT-32].
+1. **Low-Intensity Residential Zone**: Maximum of 3 stories [BAT-32].
+2. **Medium-Intensity Residential Zone**: Maximum of 5 stories [BAT-32].
+3. **High-Intensity Residential Zone**: Maximum of 8 stories [BAT-32].
+4. **Central Zone**: Maximum of 10 stories [BAT-32].
+5. **Business Zone**: Maximum of 13 stories [BAT-32].
 
-Keep in mind that the building's maximum height may also be influenced by specific regulations and detailed plans, so it's important to check those as well. 
+Additionally, specific regulations may apply based on detailed development plans, particularly regarding height allowances that might not count certain structural elements [BAT-32].
 
 This is advisory information — confirm with the relevant municipal authority before relying on it.
 
 audit trail:
   - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
   - pro_data_engine: K1=200.0, K2=600.0, K3=75.0
-  - rag_answer_agent: drafted, citation=BAT-32
-  - grounding_check: PASS (BAT-32)
+  - rag_answer_agent: drafted, citations=['BAT-32']
+  - grounding_check: PASS (['BAT-32'])
   - compliance_critic: APPROVED
   - finalize_rag_answer: answer cleared both gates
-    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients საზ-2')
-    [TOOL RESULT] found 11 article(s): ['BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14']
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients low-intensity residential zone (სზ-2)')
+    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
     [AGENT TRACE] 4 messages in this turn:
       - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
       - AIMessage: 
-      - ToolMessage: [BAT-4] მუხლი 4 (page 2, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: For a low-intensity residential zone (სზ-2), the coefficients are as follows:
-
--
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as
+    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients low-intensity residential zone (სზ-2)')
+    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
+    [AGENT TRACE] 4 messages in this turn:
+      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
+      - AIMessage: 
+      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
+      - AIMessage: For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as
 
 ======================================================================
 test-6-rag-not-covered — PRO query for 0200334455
@@ -219,20 +236,15 @@ RAG question: What are the K1, K2, and K3 coefficients for a low-intensity resid
 }
 
 --- RAG legal chat answer ---
-For a low-intensity residential zone (სზ-2), the coefficients are as follows:
-
-- K1: 0.5
-- K2: 1.2
-- K3: 0.3
-
-These parameters are defined in the Batumi municipal zoning regulations [BAT-4]. 
-
-This is advisory information — confirm with the relevant municipal authority before relying on it.
+Relevant regulation was found (clause(s): BAT-4), but this answer did not fully clear compliance review after multiple attempts. Please consult these clauses directly, or confirm with the relevant municipal authority before relying on this.
 
 audit trail:
   - validate_and_lookup: found plot at 45 Chavchavadze St, Batumi
   - pro_data_engine: K1=60.0, K2=120.0, K3=960.0
-  - rag_answer_agent: drafted, citation=BAT-4
-  - grounding_check: PASS (BAT-4)
-  - compliance_critic: APPROVED
-  - finalize_rag_answer: answer cleared both gates
+  - rag_answer_agent: drafted, citations=['BAT-4']
+  - grounding_check: PASS (['BAT-4'])
+  - compliance_critic: BOUNCED
+  - rag_answer_agent: drafted, citations=['BAT-4']
+  - grounding_check: PASS (['BAT-4'])
+  - compliance_critic: BOUNCED
+  - not_covered_fallback: returned safe default (bounce budget exhausted on a grounded draft)
