@@ -10,11 +10,19 @@ from state import PlotQueryState
 
 
 def _validate_zoning_inputs(z: dict) -> str | None:
-    """Returns an error string if inputs are out of sane range, else None."""
-    if not (0 < z["footprint_pct"] <= 100):
-        return f"footprint_pct {z['footprint_pct']} is out of range (0-100)"
+    """Returns an error string if inputs are out of sane range, else None.
+
+    footprint_pct and green_space_pct are bounded in opposite directions on
+    purpose: footprint_pct=0 (no building allowed, e.g. a protected parcel) is
+    a legitimate designation, but footprint_pct=100 (zero setback, building
+    covers the entire lot) is not. green_space_pct is the physical mirror of
+    that — green_space_pct=100 (fully green, nothing built, e.g. a landscape
+    reserve) is legitimate, but green_space_pct=0 (no green space at all) is not.
+    """
+    if not (0 <= z["footprint_pct"] < 100):
+        return f"footprint_pct {z['footprint_pct']} is out of range (0-100, exclusive of 100)"
     if not (0 < z["green_space_pct"] <= 100):
-        return f"green_space_pct {z['green_space_pct']} is out of range (0-100)"
+        return f"green_space_pct {z['green_space_pct']} is out of range (0-100, exclusive of 0)"
     if z["far"] <= 0:
         return f"far {z['far']} must be positive"
     return None
