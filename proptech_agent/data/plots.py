@@ -53,12 +53,12 @@ response dicts in pro.py / regular.py to match — this file is data only.
 
 PLOTS = {
     "0100112233": {
-        "owner_name": "Nino Beridze",
-        "address": "12 Rustaveli Ave, Tbilisi",
+        "owner_name": "ნინო ბერიძე",
+        "address": "რუსთაველის ქ. 12, ბათუმი",
         "total_area_sqm": 500,
         "land_designation": "non-agricultural",
         "legal_status": "clean",
-        "legal_status_note": "No active encumbrances on record",
+        "legal_status_note": "რეესტრში აქტიური დატვირთვები არ ფიქსირდება",
         "zoning": {
             "functional_zone": "residential_mixed_b2",
             "footprint_pct": 40,
@@ -70,12 +70,12 @@ PLOTS = {
         },
     },
     "0200334455": {
-        "owner_name": "Levan Kapanadze",
-        "address": "45 Chavchavadze St, Batumi",
+        "owner_name": "ლევან კაპანაძე",
+        "address": "ჭავჭავაძის ქ. 45, ბათუმი",
         "total_area_sqm": 1200,
         "land_designation": "agricultural",
         "legal_status": "active_mortgage",
-        "legal_status_note": "Mortgage registered 2024-03-11, Bank of Georgia",
+        "legal_status_note": "იპოთეკა რეგისტრირებულია 2024-03-11, საქართველოს ბანკი",
         "zoning": {
             "functional_zone": "agricultural_reserve",
             "footprint_pct": 5,
@@ -87,12 +87,12 @@ PLOTS = {
         },
     },
     "0300556677": {
-        "owner_name": "Salome Janelidze",
-        "address": "8 Agmashenebeli Ave, Tbilisi",
+        "owner_name": "სალომე ჯანელიძე",
+        "address": "აკაკი წერეთლის ქ. 8, ბათუმი",
         "total_area_sqm": 350,
         "land_designation": "non-agricultural",
         "legal_status": "seizure",
-        "legal_status_note": "Under court seizure order, case #4471-2026",
+        "legal_status_note": "დაყადაღებულია სასამართლოს განჩინებით, საქმე #4471-2026",
         "zoning": {
             "functional_zone": "residential_b1",
             "footprint_pct": 35,
@@ -104,12 +104,12 @@ PLOTS = {
         },
     },
     "0400778899": {
-        "owner_name": "Giorgi Melia",
-        "address": "3 Kazbegi Ave, Tbilisi",
+        "owner_name": "გიორგი მელია",
+        "address": "ხიმშიაშვილის ქ. 3, ბათუმი",
         "total_area_sqm": 800,
         "land_designation": "non-agricultural",
         "legal_status": "restricted",
-        "legal_status_note": "Utility easement restricts construction on 30% of plot",
+        "legal_status_note": "კომუნალური სერვიტუტი ზღუდავს მშენებლობას ნაკვეთის 30%-ზე",
         "zoning": {
             "functional_zone": "residential_mixed_b3",
             "footprint_pct": 45,
@@ -121,12 +121,12 @@ PLOTS = {
         },
     },
     "0500990011": {
-        "owner_name": "Tamar Gogia",
-        "address": "19 Pekini Ave, Tbilisi",
+        "owner_name": "თამარ გოგია",
+        "address": "პარნავაზ მეფის გამზ. 19, ბათუმი",
         "total_area_sqm": 600,
         "land_designation": "non-agricultural",
         "legal_status": "clean",
-        "legal_status_note": "No active encumbrances on record",
+        "legal_status_note": "რეესტრში აქტიური დატვირთვები არ ფიქსირდება",
         "zoning": {
             "functional_zone": "residential_mixed_b2",
             "footprint_pct": 140,  # deliberately malformed — exercises the R14 seatbelt

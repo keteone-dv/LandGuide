@@ -3,16 +3,16 @@
 test-1-regular-clean — REGULAR query for 0100112233
 ======================================================================
 {
-  "owner_name": "Nino Beridze",
-  "address": "12 Rustaveli Ave, Tbilisi",
+  "owner_name": "\u10dc\u10d8\u10dc\u10dd \u10d1\u10d4\u10e0\u10d8\u10eb\u10d4",
+  "address": "\u10e0\u10e3\u10e1\u10d7\u10d0\u10d5\u10d4\u10da\u10d8\u10e1 \u10e5. 12, \u10d1\u10d0\u10d7\u10e3\u10db\u10d8",
   "total_area_sqm": 500,
   "land_designation": "non-agricultural",
   "legal_status": "clean",
-  "legal_status_note": "No active encumbrances on record"
+  "legal_status_note": "\u10e0\u10d4\u10d4\u10e1\u10e2\u10e0\u10e8\u10d8 \u10d0\u10e5\u10e2\u10d8\u10e3\u10e0\u10d8 \u10d3\u10d0\u10e2\u10d5\u10d8\u10e0\u10d7\u10d5\u10d4\u10d1\u10d8 \u10d0\u10e0 \u10e4\u10d8\u10e5\u10e1\u10d8\u10e0\u10d3\u10d4\u10d1\u10d0"
 }
 
 audit trail:
-  - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
+  - validate_and_lookup: found plot at რუსთაველის ქ. 12, ბათუმი
   - regular_formatter: basic plot details returned
 
 ======================================================================
@@ -28,12 +28,12 @@ audit trail:
 test-3-pro-coefficients — PRO query for 0100112233
 ======================================================================
 {
-  "owner_name": "Nino Beridze",
-  "address": "12 Rustaveli Ave, Tbilisi",
+  "owner_name": "\u10dc\u10d8\u10dc\u10dd \u10d1\u10d4\u10e0\u10d8\u10eb\u10d4",
+  "address": "\u10e0\u10e3\u10e1\u10d7\u10d0\u10d5\u10d4\u10da\u10d8\u10e1 \u10e5. 12, \u10d1\u10d0\u10d7\u10e3\u10db\u10d8",
   "total_area_sqm": 500,
   "land_designation": "non-agricultural",
   "legal_status": "clean",
-  "legal_status_note": "No active encumbrances on record",
+  "legal_status_note": "\u10e0\u10d4\u10d4\u10e1\u10e2\u10e0\u10e8\u10d8 \u10d0\u10e5\u10e2\u10d8\u10e3\u10e0\u10d8 \u10d3\u10d0\u10e2\u10d5\u10d8\u10e0\u10d7\u10d5\u10d4\u10d1\u10d8 \u10d0\u10e0 \u10e4\u10d8\u10e5\u10e1\u10d8\u10e0\u10d3\u10d4\u10d1\u10d0",
   "functional_zone": "residential_mixed_b2",
   "k1_footprint_sqm": 200.0,
   "k2_buildable_floor_area_sqm": 600.0,
@@ -44,7 +44,7 @@ test-3-pro-coefficients — PRO query for 0100112233
 }
 
 audit trail:
-  - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
+  - validate_and_lookup: found plot at რუსთაველის ქ. 12, ბათუმი
   - pro_data_engine: K1=200.0, K2=600.0, K3=75.0
 
 ======================================================================
@@ -53,7 +53,7 @@ test-4-pro-input-validation — PRO query for 0500990011
 → REJECTED by input validation: footprint_pct 140 is out of range (0-100, exclusive of 100)
 
 audit trail:
-  - validate_and_lookup: found plot at 19 Pekini Ave, Tbilisi
+  - validate_and_lookup: found plot at პარნავაზ მეფის გამზ. 19, ბათუმი
   - pro_data_engine: REJECTED — footprint_pct 140 is out of range (0-100, exclusive of 100)
     [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients low-intensity residential zone (სზ-2)')
     [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
@@ -61,26 +61,19 @@ audit trail:
       - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
       - AIMessage: 
       - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: For the low-intensity residential zone (შეზ-2), the coefficients are as follows:
-    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients for low-intensity residential zone (სზ-2)')
-    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
-    [AGENT TRACE] 4 messages in this turn:
-      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
-      - AIMessage: 
-      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as
+      - AIMessage: The K1, K2, and K3 coefficients for a low-intensity residential zone (სზ-2) are 
 
 ======================================================================
 test-5-rag-grounded — PRO query for 0100112233
 RAG question: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (სზ-2)?
 ======================================================================
 {
-  "owner_name": "Nino Beridze",
-  "address": "12 Rustaveli Ave, Tbilisi",
+  "owner_name": "\u10dc\u10d8\u10dc\u10dd \u10d1\u10d4\u10e0\u10d8\u10eb\u10d4",
+  "address": "\u10e0\u10e3\u10e1\u10d7\u10d0\u10d5\u10d4\u10da\u10d8\u10e1 \u10e5. 12, \u10d1\u10d0\u10d7\u10e3\u10db\u10d8",
   "total_area_sqm": 500,
   "land_designation": "non-agricultural",
   "legal_status": "clean",
-  "legal_status_note": "No active encumbrances on record",
+  "legal_status_note": "\u10e0\u10d4\u10d4\u10e1\u10e2\u10e0\u10e8\u10d8 \u10d0\u10e5\u10e2\u10d8\u10e3\u10e0\u10d8 \u10d3\u10d0\u10e2\u10d5\u10d8\u10e0\u10d7\u10d5\u10d4\u10d1\u10d8 \u10d0\u10e0 \u10e4\u10d8\u10e5\u10e1\u10d8\u10e0\u10d3\u10d4\u10d1\u10d0",
   "functional_zone": "residential_mixed_b2",
   "k1_footprint_sqm": 200.0,
   "k2_buildable_floor_area_sqm": 600.0,
@@ -91,22 +84,19 @@ RAG question: What are the K1, K2, and K3 coefficients for a low-intensity resid
 }
 
 --- RAG legal chat answer ---
-For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as follows:
+The K1, K2, and K3 coefficients for a low-intensity residential zone (სზ-2) are as follows:
 
-- K1 coefficient: 0.5
-- K2 coefficient: 1.2
-- K3 coefficient: 0.3
+- K1: 0.5
+- K2: 1.2
+- K3: 0.3
 
-These specifications outline the parameters for construction within this zone [BAT-4]. 
+These coefficients are detailed in the zoning regulations [BAT-4]. 
 
 This is advisory information — confirm with the relevant municipal authority before relying on it.
 
 audit trail:
-  - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
+  - validate_and_lookup: found plot at რუსთაველის ქ. 12, ბათუმი
   - pro_data_engine: K1=200.0, K2=600.0, K3=75.0
-  - rag_answer_agent: drafted, citations=['BAT-4']
-  - grounding_check: PASS (['BAT-4'])
-  - compliance_critic: BOUNCED
   - rag_answer_agent: drafted, citations=['BAT-4']
   - grounding_check: PASS (['BAT-4'])
   - compliance_critic: APPROVED
@@ -124,12 +114,12 @@ test-6-rag-not-covered — PRO query for 0100112233
 RAG question: What's the maximum allowed noise level for a construction site at night?
 ======================================================================
 {
-  "owner_name": "Nino Beridze",
-  "address": "12 Rustaveli Ave, Tbilisi",
+  "owner_name": "\u10dc\u10d8\u10dc\u10dd \u10d1\u10d4\u10e0\u10d8\u10eb\u10d4",
+  "address": "\u10e0\u10e3\u10e1\u10d7\u10d0\u10d5\u10d4\u10da\u10d8\u10e1 \u10e5. 12, \u10d1\u10d0\u10d7\u10e3\u10db\u10d8",
   "total_area_sqm": 500,
   "land_designation": "non-agricultural",
   "legal_status": "clean",
-  "legal_status_note": "No active encumbrances on record",
+  "legal_status_note": "\u10e0\u10d4\u10d4\u10e1\u10e2\u10e0\u10e8\u10d8 \u10d0\u10e5\u10e2\u10d8\u10e3\u10e0\u10d8 \u10d3\u10d0\u10e2\u10d5\u10d8\u10e0\u10d7\u10d5\u10d4\u10d1\u10d8 \u10d0\u10e0 \u10e4\u10d8\u10e5\u10e1\u10d8\u10e0\u10d3\u10d4\u10d1\u10d0",
   "functional_zone": "residential_mixed_b2",
   "k1_footprint_sqm": 200.0,
   "k2_buildable_floor_area_sqm": 600.0,
@@ -143,32 +133,30 @@ RAG question: What's the maximum allowed noise level for a construction site at 
 This question is not covered in the available regulations.
 
 audit trail:
-  - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
+  - validate_and_lookup: found plot at რუსთაველის ქ. 12, ბათუმი
   - pro_data_engine: K1=200.0, K2=600.0, K3=75.0
   - rag_answer_agent: drafted, citations=[]
   - grounding_check: FAIL ([])
   - not_covered_fallback: returned safe default (grounding check failed)
-    [TOOL CALL] search_legal_corpus(query='max height of buildings')
+    [TOOL CALL] search_legal_corpus(query='max height of building')
     [TOOL RESULT] found 12 article(s): ['BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-32']
     [AGENT TRACE] 4 messages in this turn:
       - HumanMessage: what is the max height of building I can build here?
       - AIMessage: 
       - ToolMessage: [BAT-4] მუხლი 4 (page 2, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: The maximum height of buildings in Batumi varies depending on the zoning type:
-
-
+      - AIMessage: The maximum height of buildings in Batumi varies based on the zoning classificat
 
 ======================================================================
 test-7-pro-rag-max-height — PRO query for 0100112233
 RAG question: what is the max height of building I can build here?
 ======================================================================
 {
-  "owner_name": "Nino Beridze",
-  "address": "12 Rustaveli Ave, Tbilisi",
+  "owner_name": "\u10dc\u10d8\u10dc\u10dd \u10d1\u10d4\u10e0\u10d8\u10eb\u10d4",
+  "address": "\u10e0\u10e3\u10e1\u10d7\u10d0\u10d5\u10d4\u10da\u10d8\u10e1 \u10e5. 12, \u10d1\u10d0\u10d7\u10e3\u10db\u10d8",
   "total_area_sqm": 500,
   "land_designation": "non-agricultural",
   "legal_status": "clean",
-  "legal_status_note": "No active encumbrances on record",
+  "legal_status_note": "\u10e0\u10d4\u10d4\u10e1\u10e2\u10e0\u10e8\u10d8 \u10d0\u10e5\u10e2\u10d8\u10e3\u10e0\u10d8 \u10d3\u10d0\u10e2\u10d5\u10d8\u10e0\u10d7\u10d5\u10d4\u10d1\u10d8 \u10d0\u10e0 \u10e4\u10d8\u10e5\u10e1\u10d8\u10e0\u10d3\u10d4\u10d1\u10d0",
   "functional_zone": "residential_mixed_b2",
   "k1_footprint_sqm": 200.0,
   "k2_buildable_floor_area_sqm": 600.0,
@@ -179,20 +167,18 @@ RAG question: what is the max height of building I can build here?
 }
 
 --- RAG legal chat answer ---
-The maximum height of buildings in Batumi varies depending on the zoning type:
+The maximum height of buildings in Batumi varies based on the zoning classification:
 
-1. **Low-Intensity Residential Zone**: Maximum of 3 stories [BAT-32].
-2. **Medium-Intensity Residential Zone**: Maximum of 5 stories [BAT-32].
-3. **High-Intensity Residential Zone**: Maximum of 8 stories [BAT-32].
-4. **Central Zone**: Maximum of 10 stories [BAT-32].
-5. **Business Zone**: Maximum of 13 stories [BAT-32].
-
-Additionally, specific regulations may apply based on detailed development plans, particularly regarding height allowances that might not count certain structural elements [BAT-32].
+1. Low-intensity residential zone: Maximum of 3 floors [BAT-32].
+2. Medium-intensity residential zone: Maximum of 5 floors [BAT-32].
+3. High-intensity residential zone: Maximum of 8 floors [BAT-32].
+4. Central zone: Maximum of 10 floors [BAT-32].
+5. Business zone: Maximum of 13 floors [BAT-32].
 
 This is advisory information — confirm with the relevant municipal authority before relying on it.
 
 audit trail:
-  - validate_and_lookup: found plot at 12 Rustaveli Ave, Tbilisi
+  - validate_and_lookup: found plot at რუსთაველის ქ. 12, ბათუმი
   - pro_data_engine: K1=200.0, K2=600.0, K3=75.0
   - rag_answer_agent: drafted, citations=['BAT-32']
   - grounding_check: PASS (['BAT-32'])
@@ -204,26 +190,19 @@ audit trail:
       - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
       - AIMessage: 
       - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as
-    [TOOL CALL] search_legal_corpus(query='K1 K2 K3 coefficients low-intensity residential zone (სზ-2)')
-    [TOOL RESULT] found 15 article(s): ['BAT-2', 'BAT-3', 'BAT-4', 'BAT-5', 'BAT-6', 'BAT-7', 'BAT-8', 'BAT-9', 'BAT-10', 'BAT-11', 'BAT-12', 'BAT-13', 'BAT-14', 'BAT-15', 'BAT-16']
-    [AGENT TRACE] 4 messages in this turn:
-      - HumanMessage: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (ს
-      - AIMessage: 
-      - ToolMessage: [BAT-2] მუხლი 2 (page 1, ქალაქ ბათუმის მუნიციპალიტეტის განაშენიანების გეგმის გან
-      - AIMessage: For the low-intensity residential zone (სზ-2) in Batumi, the coefficients are as
+      - AIMessage: The coefficients for a low-intensity residential zone (სზ-2) in Batumi are as fo
 
 ======================================================================
 test-6-rag-not-covered — PRO query for 0200334455
 RAG question: What are the K1, K2, and K3 coefficients for a low-intensity residential zone (სზ-2)?
 ======================================================================
 {
-  "owner_name": "Levan Kapanadze",
-  "address": "45 Chavchavadze St, Batumi",
+  "owner_name": "\u10da\u10d4\u10d5\u10d0\u10dc \u10d9\u10d0\u10de\u10d0\u10dc\u10d0\u10eb\u10d4",
+  "address": "\u10ed\u10d0\u10d5\u10ed\u10d0\u10d5\u10d0\u10eb\u10d8\u10e1 \u10e5. 45, \u10d1\u10d0\u10d7\u10e3\u10db\u10d8",
   "total_area_sqm": 1200,
   "land_designation": "agricultural",
   "legal_status": "active_mortgage",
-  "legal_status_note": "Mortgage registered 2024-03-11, Bank of Georgia",
+  "legal_status_note": "\u10d8\u10de\u10dd\u10d7\u10d4\u10d9\u10d0 \u10e0\u10d4\u10d2\u10d8\u10e1\u10e2\u10e0\u10d8\u10e0\u10d4\u10d1\u10e3\u10da\u10d8\u10d0 2024-03-11, \u10e1\u10d0\u10e5\u10d0\u10e0\u10d7\u10d5\u10d4\u10da\u10dd\u10e1 \u10d1\u10d0\u10dc\u10d9\u10d8",
   "functional_zone": "agricultural_reserve",
   "k1_footprint_sqm": 60.0,
   "k2_buildable_floor_area_sqm": 120.0,
@@ -236,15 +215,20 @@ RAG question: What are the K1, K2, and K3 coefficients for a low-intensity resid
 }
 
 --- RAG legal chat answer ---
-Relevant regulation was found (clause(s): BAT-4), but this answer did not fully clear compliance review after multiple attempts. Please consult these clauses directly, or confirm with the relevant municipal authority before relying on this.
+The coefficients for a low-intensity residential zone (სზ-2) in Batumi are as follows:
+
+- K1 coefficient: 0.5
+- K2 coefficient: 1.2
+- K3 coefficient: 0.3 
+
+These parameters define the construction indicators for this specific zoning type [BAT-4]. 
+
+This is advisory information — confirm with the relevant municipal authority before relying on it.
 
 audit trail:
-  - validate_and_lookup: found plot at 45 Chavchavadze St, Batumi
+  - validate_and_lookup: found plot at ჭავჭავაძის ქ. 45, ბათუმი
   - pro_data_engine: K1=60.0, K2=120.0, K3=960.0
   - rag_answer_agent: drafted, citations=['BAT-4']
   - grounding_check: PASS (['BAT-4'])
-  - compliance_critic: BOUNCED
-  - rag_answer_agent: drafted, citations=['BAT-4']
-  - grounding_check: PASS (['BAT-4'])
-  - compliance_critic: BOUNCED
-  - not_covered_fallback: returned safe default (bounce budget exhausted on a grounded draft)
+  - compliance_critic: APPROVED
+  - finalize_rag_answer: answer cleared both gates

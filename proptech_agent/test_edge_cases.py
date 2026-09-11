@@ -349,11 +349,11 @@ def test_8_thread_isolation():
         problems.append(f"thread B rag_draft leaked from thread A: {result_b['rag_draft']!r}")
     if result_b.get("bounce_count", 0) != 0:
         problems.append(f"thread B bounce_count leaked: {result_b['bounce_count']}")
-    if any("0200334455" in a or "Levan" in a for a in result_b["audit"]):
+    if any("0200334455" in a or "ლევან" in a for a in result_b["audit"]):
         problems.append("thread B audit trail contains thread A's plot data")
-    if result_b["pro_response"]["owner_name"] != "Giorgi Melia":
+    if result_b["pro_response"]["owner_name"] != "გიორგი მელია":
         problems.append(f"thread B returned wrong plot owner: {result_b['pro_response']['owner_name']}")
-    if result_a["pro_response"]["owner_name"] != "Levan Kapanadze":
+    if result_a["pro_response"]["owner_name"] != "ლევან კაპანაძე":
         problems.append(f"thread A returned wrong plot owner: {result_a['pro_response']['owner_name']}")
 
     record(
