@@ -21,14 +21,15 @@ from graph import proptech_system
 
 app = FastAPI(title="PropTech Intelligence API")
 
-# CORS: without this, a browser will BLOCK your future Next.js frontend
-# from calling this API, even on your own machine, because they run on
-# different ports (different "origins"). "*" means "allow any website" —
-# fine for local development, but tighten this to your real frontend's
-# domain before this ever goes to production.
+# CORS: without this, a browser will BLOCK your Next.js frontend from
+# calling this API. Restricted to the production Vercel deployment and
+# localhost for local development — do not widen this back to "*".
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://landguide-frontend.vercel.app",
+        "http://localhost:3000",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
