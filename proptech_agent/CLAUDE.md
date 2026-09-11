@@ -55,6 +55,10 @@ Full requirements table (R1–R15) and rationale: see README.md.
   unless explicitly asked to build the cross-reference feature.
 - The eval bar for the RAG chat is 100% on the curated test set — any change
   to desks/rag.py should be re-verified against test-5/test-6 in main.py.
+- Plot data is intentionally mock-only for now. A NAPR (Georgia's public
+  registry) plot search API integration was attempted and abandoned — the
+  endpoint's response data wasn't sufficient to populate the full record
+  shape needed. Future integration is undecided and not actively planned.
 
 ## Current status
 - Core pipeline + RAG agent loop: built, tested, working (see test_results.txt)
@@ -63,11 +67,49 @@ Full requirements table (R1–R15) and rationale: see README.md.
   hosted on Render/Railway + Vercel (free tier), Supabase Postgres later
 - NOT yet built: the FastAPI wrapper layer, the frontend, real API integration
   for plot data (currently mock)
+- Pricing decided — exactly two packages, no more:
+  - **Free / Regular Plan**: unlimited basic lookups (owner, address, area,
+    land designation, legal status), no account needed
+  - **Pro**: pay-per-report, ~15 GEL, includes full coefficient/zoning
+    analysis + unlimited RAG legal chat questions about that specific report
+    for 7 days after purchase. Access is time-boxed, not question-counted —
+    per-question cost is negligible on gpt-4o-mini, so time is the right
+    lever, not a quota.
+  - No monthly/subscription/firm tiers yet — this is deliberately deferred,
+    not a "coming soon" placeholder
 
-## Next step (fill in before starting a session)
-Integrating an external API: ___________________________
-[Paste what the API provides, its docs link, and whether it replaces
-data/plots.py, feeds data/legal_corpus.json, or is something else entirely.]
+## Roadmap — not yet built
+Rough priority order:
+1. Frontend (Next.js) connected to the existing api.py
+2. Basic user accounts — required before payment can work at all
+3. Stripe integration for the pay-per-report flow
+4. A payment/credit gate in api.py, placed BEFORE `proptech_system.invoke()`
+   is called for any Pro-tier or RAG request. This is a plain rule-based
+   check ("does this user have valid access") — it does NOT belong in
+   graph.py or any desk, and must never be added there.
+5. Downloadable PDF report feature (see below)
+6. Real NAPR API integration to replace mock plots.py — see "Known,
+   documented limitations" above (attempted once, abandoned, undecided)
+
+### PDF report feature (new, not yet built)
+- **Purpose**: the actual tangible deliverable a Pro customer keeps after
+  their 7-day access window ends. Right now the product's only deliverable
+  is temporary chat access, which is a weak thing to sell.
+- **Content**: the plot's Pro-tier data (coefficients, zoning, limits) +
+  every RAG question asked, its answer, and its citation, for that report.
+- Zero new agent/LLM logic required — this is pure formatting of data that
+  already exists in `pro_response` and `rag_final_answer`. A **Rule**, not a
+  judgment call, consistent with the project's core design principle.
+- Two open design decisions to resolve before building, not during:
+  (a) is the report a live/regenerate-on-demand snapshot, or locked at
+  first download — leaning toward always-regenerate; and (b) the "confirm
+  with municipal authority" disclaimer must be printed directly on the
+  document itself (ideally every page with a citation), not just shown in
+  the chat UI, since a PDF can leave the product's context entirely once
+  downloaded or forwarded.
+- Sequencing: build this AFTER the core paid flow is validated with a real
+  payment (frontend + accounts + Stripe + gate all working) — not before.
+  Explicitly deprioritized below items 1–4 above.
 
 ## Conventions to follow when adding code
 - Keep the rule-vs-judgment split explicit — new functions get a one-line
