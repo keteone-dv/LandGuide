@@ -12,6 +12,7 @@ clearing both gates.
 """
 import json
 import re
+import sys
 from pathlib import Path
 
 from langchain.agents import create_agent
@@ -20,6 +21,12 @@ from langchain.tools import tool
 
 from config import MODEL
 from state import PlotQueryState
+
+# The legal corpus and agent output are Georgian-language text. On Windows,
+# stdout defaults to the legacy cp1252 codepage, which can't encode Georgian
+# script — the debug prints below would crash the whole RAG pipeline the
+# moment a tool hit or answer contained non-cp1252 characters.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 model = init_chat_model(MODEL)
 
