@@ -46,7 +46,7 @@ def search_legal_corpus(query: str) -> str:
     query_words = set(query.lower().split())
     hits = []
     for clause in LEGAL_CORPUS:
-        haystack = " ".join(clause["topic_tags"] + [clause["text"]]).lower()
+        haystack = " ".join(clause["topic_tags"] + [clause["title"], clause["text"]]).lower()
         if any(w in haystack for w in query_words):
             hits.append(clause)
 
