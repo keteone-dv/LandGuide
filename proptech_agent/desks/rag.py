@@ -30,7 +30,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 model = init_chat_model(MODEL)
 
-MAX_CRITIC_BOUNCES = 2
+MAX_CRITIC_BOUNCES = 3
 
 _CORPUS_PATH = Path(__file__).parent.parent / "data" / "legal_corpus.json"
 with open(_CORPUS_PATH, encoding="utf-8") as f:
