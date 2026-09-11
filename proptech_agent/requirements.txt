@@ -4,3 +4,6 @@ langchain-openai
 pdfplumber
 python-dotenv
 streamlit
+fastapi
+uvicorn[standard]
+pydantic
